@@ -3,9 +3,11 @@
   :url ""
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :plugins [[lein-auto "0.1.3"]]
   :dependencies [
     [org.clojure/clojure "1.8.0"]
-    [com.kennycason/kumo 1.8]]
-  :main ^:skip-aot wckit.core
+    [com.evocomputing/colors "1.0.3"]
+    [com.kennycason/kumo "1.8"]]
+  :main ^:skip-aot wckit.playground
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

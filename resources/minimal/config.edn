@@ -1,0 +1,7 @@
+{
+  :start-input "minimal/minimal.txt"
+
+  :text-color "black"
+
+  :background-color "green"
+}

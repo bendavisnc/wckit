@@ -1,0 +1,7 @@
+{
+  :start-input "starwars/starwars.txt"
+
+  :text-color "white"
+
+  :background-color "black"
+}
