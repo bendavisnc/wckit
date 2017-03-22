@@ -1,6 +1,6 @@
 (ns wckit.playground
   (:require
-    [wckit.core :refer [create-new, input, spit-png, size]]
+    [wckit.core :refer [create-new, input, spit-png, size, max-font-size, min-font-size, limit, background-color]]
     [clojure.java.io :as io]
     )
   (:gen-class))
@@ -15,7 +15,12 @@
         "starwars/starwars.txt"
         io/resource
         io/file))
-    (size 1600 1200)
+    ; (size 1600 1200)
+    (size 3200 2400)
+    (max-font-size 100)
+    (min-font-size 40)
+    (limit 500)
+    (background-color "black")
     ))
 
 (def minimal-example

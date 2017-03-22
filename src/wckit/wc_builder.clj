@@ -20,13 +20,14 @@
           (.setWordFrequenciesToReturn (:limit wck)))
       word-frequencies (.load frequency-analyzer (get-in wck [:input-data :input-source]))
       kumo-wc (new WordCloud dimension, CollisionMode/RECTANGLE)
-      font-size (:font-size wck)
+      min-font-size (get-in wck [:font-data, :min-size])
+      max-font-size (get-in wck [:font-data, :max-size])
     ]
     (doto
       kumo-wc
       (.setBackgroundColor 
         (colors/create-color (:background-color wck)))
-      (.setFontScalar (new LinearFontScalar font-size font-size))
+      (.setFontScalar (new LinearFontScalar min-font-size max-font-size))
       (.build word-frequencies))))
 
 
