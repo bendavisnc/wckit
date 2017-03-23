@@ -1,18 +1,24 @@
 (ns wckit.wc-builder
   (:require
-    [common.colors :as colors])
+    [common.colors :as colors]
+    [wckit.helpers :refer [build-color-pallette, build-color-pallette]]
+    )
   (:import
     (com.kennycason.kumo.nlp FrequencyAnalyzer)
     (com.kennycason.kumo WordCloud)
     (com.kennycason.kumo CollisionMode)
     (com.kennycason.kumo.font.scale LinearFontScalar)
     (java.awt Dimension)
-    (com.kennycason.kumo.font KumoFont FontWeight))
+    (com.kennycason.kumo.font KumoFont FontWeight)
+    (com.kennycason.kumo.palette ColorPalette))
   )
 
 
 
+;[wckit.helpers :refer [build-color-pallette]]
     ; (java.awt Color)
+
+
 (defn build [wck]
   (let [
       dimension (apply #(new java.awt.Dimension %1 %2) (:size wck))
@@ -28,6 +34,7 @@
         (new KumoFont
           ^String (get-in wck [:font-data, :style])
            FontWeight/BOLD)
+      font-colors (get-in wck [:font-data, :color])
     ]
     (doto
       kumo-wc
@@ -35,6 +42,12 @@
         (colors/create-color (:background-color wck)))
       (.setFontScalar (new LinearFontScalar min-font-size max-font-size))
       (.setKumoFont font-style)
+      (.setColorPalette
+        (apply build-color-pallette
+          (if
+            (seq? font-colors)
+            font-colors
+            [font-colors])))
       (.build word-frequencies))))
 
 

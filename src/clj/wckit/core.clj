@@ -19,38 +19,37 @@
 (defprotocol WCKitProtocol
   "Interface for core wckit usage."
 
-  (size [this, width, height] 
+  (size [this, ^Integer width, ^Integer height]
     "The size (x and y resolution) of the word cloud render.")
 
-  (limit [this, n]
+  (limit [this, ^Integer n]
     "The maximum amount of individual words to render.")
 
-  (font-color [this, c]
-    "Data representing font color.")
+  (font-color [this, cs]
+    "A list (single value allowed) representing  a scale of color.")
 
-  (font-size [this, v]
+  (font-size [this, ^Integer v]
     "Data representing the minimum and maximum font size scale.")
 
   (font-style [this, ^String s]
     "Data representing font style.")
 
-  (min-font-size [this, v]
+  (min-font-size [this, ^Integer v]
     "Set the minimum for font size scale.")
 
-  (max-font-size [this, v]
+  (max-font-size [this, ^Integer v]
     "Set the maximum for font size scale.")
 
-  ;(collision-mode [this, m]
   (collision-mode [this, ^CollisionMode m]
     "Which collision mode algorithm to use.")
 
-  (background-color [this, c]
+  (background-color [this, ^String c]
     "The plain background color to use for the render.")
 
   (input [this, args]
     "Data representing input data.")
 
-  (spit-png [this, filepath]
+  (spit-png [this, ^String filepath]
     "The method that actually does the thing. Spits out a wordcloud png according to what the filepath says.")
   )
 
@@ -101,11 +100,11 @@
     :font-data {
         :min-size 10
         :max-size 50
-        :color "white"
+        :color (list "blue" "red")
         :style "impact"
       }
     :collision-mode CollisionMode/PIXEL_PERFECT
-    :background-color "blue"
+    :background-color "white"
   })
  
 
