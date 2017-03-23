@@ -1,11 +1,10 @@
 (ns wckit.playground
   (:require
-    [wckit.core :refer [create-new, input, spit-png, size, max-font-size, min-font-size, limit, background-color]]
+    [wckit.core :refer [create-new, input, spit-png, size, max-font-size, min-font-size, font-style, limit, collision-mode, background-color]]
     [clojure.java.io :as io]
     )
+  (:import (com.kennycason.kumo CollisionMode))
   (:gen-class))
-
-(org.apache.log4j.BasicConfigurator/configure)
 
 (def starwars-example
   (->
@@ -17,10 +16,14 @@
         io/file))
     ; (size 1600 1200)
     (size 3200 2400)
-    (max-font-size 100)
+    (max-font-size 500)
     (min-font-size 40)
     (limit 500)
     (background-color "black")
+    (font-style "impact")
+    ;(collision-mode ^CollisionMode CollisionMode/RECTANGLE)
+    ;(collision-mode CollisionMode/RECTANGLE)
+    (collision-mode "bobmode")
     ))
 
 (def minimal-example

@@ -1,0 +1,6 @@
+
+- add font style 
+
+add font color
+
+- add collision option

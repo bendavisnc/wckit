@@ -7,8 +7,10 @@
     (com.kennycason.kumo CollisionMode)
     (com.kennycason.kumo.font.scale LinearFontScalar)
     (java.awt Dimension)
-    )
+    (com.kennycason.kumo.font KumoFont FontWeight))
   )
+
+
 
     ; (java.awt Color)
 (defn build [wck]
@@ -22,12 +24,17 @@
       kumo-wc (new WordCloud dimension, CollisionMode/RECTANGLE)
       min-font-size (get-in wck [:font-data, :min-size])
       max-font-size (get-in wck [:font-data, :max-size])
+      font-style
+        (new KumoFont
+          ^String (get-in wck [:font-data, :style])
+           FontWeight/BOLD)
     ]
     (doto
       kumo-wc
       (.setBackgroundColor 
         (colors/create-color (:background-color wck)))
       (.setFontScalar (new LinearFontScalar min-font-size max-font-size))
+      (.setKumoFont font-style)
       (.build word-frequencies))))
 
 
