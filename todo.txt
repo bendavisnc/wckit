@@ -1,6 +1,12 @@
 
 - add font style 
 
-add font color
+- add font color
 
 - add collision option
+
+- add from-edn
+
+filters
+
+layout stuff

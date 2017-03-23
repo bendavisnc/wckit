@@ -8,18 +8,13 @@
     (com.kennycason.kumo WordCloud)
     (com.kennycason.kumo CollisionMode)
     (com.kennycason.kumo.font.scale LinearFontScalar)
-    (java.awt Dimension)
     (com.kennycason.kumo.font KumoFont FontWeight)
-    (com.kennycason.kumo.palette ColorPalette))
+    )
   )
 
 
-
-;[wckit.helpers :refer [build-color-pallette]]
-    ; (java.awt Color)
-
-
 (defn build [wck]
+  "Given a word cloud kit, build up the corresponding kumo.WordCloud object."
   (let [
       dimension (apply #(new java.awt.Dimension %1 %2) (:size wck))
       frequency-analyzer 
@@ -40,6 +35,7 @@
       kumo-wc
       (.setBackgroundColor 
         (colors/create-color (:background-color wck)))
+      (.setPadding 2)
       (.setFontScalar (new LinearFontScalar min-font-size max-font-size))
       (.setKumoFont font-style)
       (.setColorPalette

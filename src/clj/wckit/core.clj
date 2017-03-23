@@ -100,11 +100,11 @@
     :font-data {
         :min-size 10
         :max-size 50
-        :color (list "blue" "red")
+        :color "white"
         :style "impact"
       }
     :collision-mode CollisionMode/PIXEL_PERFECT
-    :background-color "white"
+    :background-color "black"
   })
  
 
