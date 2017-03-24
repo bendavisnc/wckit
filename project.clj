@@ -9,12 +9,12 @@
     [com.evocomputing/colors "1.0.3"]
     [com.kennycason/kumo "1.8"]]
   ;:main ^:skip-aot wckit.playground
-  ;:main wckit.playground
-  :main wckit.core
+  :main wckit.playground
+  ;:main wckit.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
   :source-paths      ["src/clj"]
   :java-source-paths ["src/java"]
   ;:aot [wckit.playground, wckit.core]
-  :aot [wckit.core]
+  ;:aot [wckit.core]
   )

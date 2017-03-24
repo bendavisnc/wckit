@@ -4,14 +4,16 @@ import clojure.lang.PersistentVector;
 import com.kennycason.kumo.CollisionMode;
 
 
+import java.awt.*;
 import java.io.File;
 import java.util.List;
 
 /**
  * Interface for core wckit usage.
+ *   HIGHLY based on com.kennycason.kumo.cli.CliParameters.
+ *     Essentially tries to be a super set that can exist as edn data.
  */
 public interface IWCKit {
-
 
     /**
      *
@@ -35,7 +37,7 @@ public interface IWCKit {
      * @param colors A list (single value allowed) representing  a scale of color.
      * @return self
      */
-    IWCKit fontcolor(String... colors);
+    IWCKit fontColor(List<Color> colors);
 
 
     /**
@@ -43,7 +45,7 @@ public interface IWCKit {
      * @param sizes Data representing the minimum and maximum font size scale.
      * @return self
      */
-    public IWCKit fontsize(Long... sizes);
+    public IWCKit fontSize(Long... sizes);
 
 
     /**
@@ -51,35 +53,35 @@ public interface IWCKit {
      * @param s Data representing font style.
      * @return self
      */
-    public IWCKit fontstyle(String s);
+    public IWCKit fontStyle(String s);
 
     /**
      *
      * @param v Set the minimum for font size scale.
      * @return self
      */
-    IWCKit minfontsize(Long v);
+    IWCKit minFontSize(Long v);
 
     /**
      *
      * @param v Set the maximum for font size scale.
      * @return self
      */
-    IWCKit maxfontsize(Long v);
+    IWCKit maxFontSize(Long v);
 
     /**
      *
      * @param m Which collision mode algorithm to use.
      * @return self
      */
-    IWCKit collisionmode(CollisionMode m);
+    IWCKit collisionMode(CollisionMode m);
 
     /**
      *
      * @param c The plain background color to use for the render.
      * @return self
      */
-    IWCKit backgroundcolor(String c);
+    IWCKit backgroundColor(String c);
 
 
     /**
@@ -99,6 +101,6 @@ public interface IWCKit {
      * @param filepath
      * @return self
      */
-    IWCKit spitpng(String filepath);
+    IWCKit spitPng(String filepath);
 
 }

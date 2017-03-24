@@ -8,14 +8,10 @@
     [wckit.wc-input :as wc-input]
     [wckit.wc-builder :as wc-builder]
     [clojure.java.io :as io]
-    [common.helpers :refer [init-apache-logging!]]
+    [common.helpers :refer [init-kumo-logging!]]
     )
   (:gen-class)
   )
-
-(init-apache-logging!) ; I said shut up, you!
-
-
 
 (defrecord WCKitProto [
     input-data,
@@ -31,26 +27,26 @@
       (assoc this :size [width, height]))
     (limit [this, v]
       (assoc this :limit v))
-    (fontcolor [this, c]
+    (fontColor [this, c]
       (assoc-in this [:font-data :color] c))
-    (fontstyle [this, s]
+    (fontStyle [this, s]
       (assoc-in this [:font-data :style] s))
-    (fontsize [this, v] ; todo - cleanup
+    (fontSize [this, v] ; todo - cleanup
       (assoc-in  
         (assoc-in this [:font-data :max-size] v)
           [:font-data :min-size] v))
-    (maxfontsize [this, v]
+    (maxFontSize [this, v]
       (assoc-in this [:font-data :max-size] v))
-    (minfontsize [this, v]
+    (minFontSize [this, v]
       (assoc-in this [:font-data :min-size] v))
     ;(collision-mode [this, ^CollisionMode m]
-    (collisionmode [this, m]
+    (collisionMode [this, m]
       (assoc this :collision-mode m))
-    (backgroundcolor [this, c]
+    (backgroundColor [this, c]
       (assoc this :background-color c))
-    ;(input [this, args]
-    ;  (wc-input/input this args))
-    (spitpng [this, filepath]
+    (input [this, args]
+      (wc-input/input this args))
+    (spitPng [this, filepath]
       (.writeToFile
         (wc-builder/build this) filepath))
     )
@@ -69,8 +65,50 @@
     :collision-mode CollisionMode/PIXEL_PERFECT
     :background-color "black"
   })
- 
+
+
+;;
+;;
+;; Exposed helper methods...
 
 (defn create-new []
   (map->WCKitProto defaults))
+
+(defn size [wck, width, height]
+  (.size wck width height))
+
+(defn limit [wck, v]
+  (.limit wck v))
+
+(defn font-color [wck, & c]
+  (.fontColor wck c))
+
+(defn font-style [wck, s]
+  (.fontStyle wck s))
+
+(defn max-font-size [wck, s]
+  (.maxFontSize wck s))
+
+(defn min-font-size [wck, s]
+  (.minFontSize wck s))
+
+(defn collision-mode [wck, m]
+  (.collisionMode wck m))
+
+(defn background-color [wck, c]
+  (.backgroundColor wck c))
+
+(defn input [wck, args]
+  (.input wck args))
+
+(defn spit-png [wck, filepath]
+  (.spitPng wck filepath))
+
+;(defn -main []
+;  (println
+;    "hey guys..."))
+
+(init-kumo-logging!)
+
+
 
