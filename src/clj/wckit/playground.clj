@@ -1,50 +1,61 @@
 (ns wckit.playground
   (:require
-    [wckit.core :refer [create-new, input, spit-png, size, font-color, max-font-size, min-font-size, font-style, limit, collision-mode, background-color]]
+    [wckit.core :refer [create-new]]
     [clojure.java.io :as io]
+    [wckit.core]
     )
-  (:import (com.kennycason.kumo CollisionMode))
+  (:import
+    [wckit.addcore IWCKit]
+    )
   (:gen-class))
 
-(def starwars-example
-  (->
-    (create-new)
-    (input 
-      (->
-        "starwars/starwars.txt"
-        io/resource
-        io/file))
-    (size 1600 1200)
-    ; (max-font-size 250)
-    (max-font-size 150)
-    (min-font-size 40)
-    ; (limit 100)
-    (limit 500)
-    (background-color "white")
-    (font-style "impact")
-    (font-color "blue" )
-    ; (collision-mode "bobmode")
-    ))
+;ISeq
+;[wckit.core WCKitProto]
+;[wckit.core IWCKit]
+;  [wckit.core :only [fontcolor]])
+;(wckit.core WCKitProto)
+;[wckit.core IWCKit]
+;[wckit.core :refer [WCKitProto]]
+;[wckit.core :refer [create-new, WCKitProto]]
 
-(def minimal-example
-  (->
-    (create-new)
-    (input 
-      (->
-        "minimal/minimal.txt"
-        io/resource
-        io/file))))
+;(def starwars-example
+;  (->
+;    (create-new)
+;    ;(.input
+;    ;  (->
+;    ;    "starwars/starwars.txt"
+;    ;    io/resource
+;    ;    io/file))
+;    (.size 1600 1200)
+;    (.maxfontsize 150)
+;    (.minfontsize 40)
+;    ; (limit 100)
+;    (.limit 500)
+;    (.backgroundcolor "white")
+;    (.fontstyle "impact")
+;    (.fontcolor "blue")
+;    ; (collision-mode "bobmode")
+;    ))
 
-(defn starwars-test []
-  (spit-png starwars-example "starwarstest.png"))
+;(def minimal-example
+;  (->
+;    (create-new)
+;    (input
+;      (->
+;        "minimal/minimal.txt"
+;        io/resource
+;        io/file))))
 
-(defn minimal-test []
-  (spit-png minimal-example "minimaltest.png"))
+;(defn starwars-test []
+;  (.spit-png starwars-example "starwarstest.png"))
+
+;(defn minimal-test []
+;  (spit-png minimal-example "minimaltest.png"))
 
 
-(defn -main
-  [& args]
-  (time
-    ; (minimal-test)))
-    (starwars-test)))
+;(defn -main
+;  [& args]
+;  (time
+;    ; (minimal-test)))
+;    (starwars-test)))
 
