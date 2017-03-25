@@ -1,6 +1,5 @@
-package wckit.addcore;
+package wckit.java.core;
 
-import clojure.lang.PersistentVector;
 import com.kennycason.kumo.CollisionMode;
 
 
@@ -13,7 +12,7 @@ import java.util.List;
  *   HIGHLY based on com.kennycason.kumo.cli.CliParameters.
  *     Essentially tries to be a super set that can exist as edn data.
  */
-public interface IWCKit {
+public interface IWCKitOld {
 
     /**
      *

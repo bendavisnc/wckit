@@ -1,4 +1,4 @@
-package wckit.addcore.playground;
+package wckit.java.core.playground;
 
 
 //import wckit.fuckssake;
