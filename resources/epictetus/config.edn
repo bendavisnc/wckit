@@ -1,0 +1,21 @@
+{
+  :input-data
+    {
+      :input-source "epictetus/epictetus.txt"
+      :resource? true
+    },
+  ;:limit 500,
+  :limit 100,
+  :size [1600 1200],
+  :font-data
+    {
+      :min-size 40,
+      :max-size 100,
+      :color "blue",
+      ;:style "Sans"
+     :style "Sans"
+    },
+  :collision-mode
+  "PIXEL_PERFECT"
+  :background-color "black"
+}

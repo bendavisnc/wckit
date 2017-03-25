@@ -6,7 +6,7 @@
   (:import
     (com.kennycason.kumo.palette ColorPalette)
     (java.awt Color)
-    (wckit.core WCKitProto)))
+    ))
 
 ; (defmacro build-color-pallette [cs]
   ; `(new ColorPalette
@@ -25,7 +25,7 @@
         cs))))
 
 
-(defn get-input-file [^WCKitProto wck]
+(defn get-input-file [wck]
   (let [
       filter-or-identity
         (if

@@ -15,6 +15,4 @@
   :profiles {:uberjar {:aot :all}}
   :source-paths      ["src/clj"]
   :java-source-paths ["src/java"]
-  ;:aot [wckit.playground, wckit.core]
-  ;:aot [wckit.core]
   )

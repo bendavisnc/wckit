@@ -11,8 +11,10 @@
     [common.helpers :refer [init-kumo-logging!]]
     [clojure.edn :as edn]
     )
-  (:gen-class)
   )
+
+;(:gen-class
+;  :methods [#^{:static true} [createNew [] IWCKit]])
 
 (defrecord WCKitProto [
     input-data,
@@ -50,7 +52,12 @@
     (spitPng [this, filepath]
       (.writeToFile
         (wc-builder/build this) filepath))
-
+    (fromEdn [this, filepath]
+      (map->WCKitProto
+        (merge
+          this
+          (edn/read-string
+            (slurp (io/resource filepath))))))
     )
 
 (def ^:private defaults
@@ -76,11 +83,8 @@
 (defn create-new []
   (map->WCKitProto defaults))
 
-(defn from-edn [filepath]
-  "edn resource file path --> IWCKit"
-  (map->WCKitProto
-    (edn/read-string
-      (slurp (io/resource filepath)))))
+(defn createNew []
+  (create-new))
 
 (defn size [wck, width, height]
   (.size wck width height))
@@ -92,7 +96,9 @@
   (.fontColor wck c))
 
 (defn font-style [wck, s]
-  (.fontStyle wck s))
+  (do
+    (println "hey")
+    (.fontStyle wck s)))
 
 (defn max-font-size [wck, s]
   (.maxFontSize wck s))
@@ -111,6 +117,9 @@
 
 (defn spit-png [wck, filepath]
   (.spitPng wck filepath))
+
+(defn from-edn [wck, filepath]
+  (.fromEdn wck filepath))
 
 
 

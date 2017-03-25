@@ -1,0 +1,22 @@
+{
+  :input-data
+    {
+      :input-source "aurelius/meditations.txt"
+      :resource? true
+    },
+  ;:limit 500,
+  :limit 100,
+  :size [1600 1200],
+  :font-data
+    {
+      :min-size 40,
+      :max-size 100,
+      ;:color "white",
+      ;:color "green",
+      :color "pink",
+      :style "impact"
+    },
+  :collision-mode
+  "PIXEL_PERFECT"
+  :background-color "black"
+}

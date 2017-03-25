@@ -103,5 +103,10 @@ public interface IWCKit {
      */
     IWCKit spitPng(String filepath);
 
-
+    /**
+     *
+     * @param filepath The resource location of the edn config.
+     * @return an IWCKit instance based on the resolved edn config.
+     */
+    IWCKit fromEdn(String filepath);
 }
