@@ -1,7 +1,7 @@
 (ns wckit.wc-builder
   (:require
     [common.colors :as colors]
-    [wckit.helpers :refer [build-color-pallette, build-color-pallette]]
+    [wckit.helpers :refer [build-color-pallette, get-input-file]]
     )
   (:import
     (com.kennycason.kumo.nlp FrequencyAnalyzer)
@@ -21,7 +21,8 @@
         (doto
           (new FrequencyAnalyzer)
           (.setWordFrequenciesToReturn (:limit wck)))
-      word-frequencies (.load frequency-analyzer (get-in wck [:input-data :input-source]))
+      ;word-frequencies (.load frequency-analyzer (get-in wck [:input-data :input-source]))
+      word-frequencies (.load frequency-analyzer (get-input-file wck))
       kumo-wc (new WordCloud dimension, CollisionMode/RECTANGLE)
       min-font-size (get-in wck [:font-data, :min-size])
       max-font-size (get-in wck [:font-data, :max-size])

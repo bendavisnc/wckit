@@ -9,6 +9,7 @@
     [wckit.wc-builder :as wc-builder]
     [clojure.java.io :as io]
     [common.helpers :refer [init-kumo-logging!]]
+    [clojure.edn :as edn]
     )
   (:gen-class)
   )
@@ -49,6 +50,7 @@
     (spitPng [this, filepath]
       (.writeToFile
         (wc-builder/build this) filepath))
+
     )
 
 (def ^:private defaults
@@ -73,6 +75,12 @@
 
 (defn create-new []
   (map->WCKitProto defaults))
+
+(defn from-edn [filepath]
+  "edn resource file path --> IWCKit"
+  (map->WCKitProto
+    (edn/read-string
+      (slurp (io/resource filepath)))))
 
 (defn size [wck, width, height]
   (.size wck width height))
@@ -103,6 +111,8 @@
 
 (defn spit-png [wck, filepath]
   (.spitPng wck filepath))
+
+
 
 ;(defn -main []
 ;  (println
