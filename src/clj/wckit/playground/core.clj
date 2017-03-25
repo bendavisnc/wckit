@@ -3,7 +3,6 @@
     [wckit.core :refer [map->WCKitProto, from-edn, input, size, max-font-size, min-font-size, limit, background-color, font-style, font-color, spit-png]]
     [clojure.java.io :as io]
     [wckit.core]
-    [wckit.fuckssake]
     [clojure.edn :as edn]
     )
   (:gen-class))
