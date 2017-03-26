@@ -26,12 +26,14 @@ import com.kennycason.kumo.wordstart.WordStartStrategy;
 import org.apache.commons.lang3.StringUtils;
 import wckit.java.core.IWCKit;
 
-import java.awt.*;
-import java.awt.List;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.io.*;
 import java.net.URL;
-import java.util.*;
-import java.util.jar.Manifest;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * HIGHLY based (copy n paste) on com.kennycason.kumo.cli.KumoCli.
@@ -46,7 +48,7 @@ public class WCBuilder {
     }
 
     public WordCloud buildWordCloud() {
-        switch(this.wcKit.getType().ordinal()) {
+        switch(this.wcKit.getType().ordinal() + 1) {
             case 1:
                 return this.buildStandardWordCloud();
             case 2:
@@ -83,6 +85,9 @@ public class WCBuilder {
 //        }
 //    }
 
+    public List<Color> getColors() {
+        return StringUtils.isBlank(this.wcKit.getRawColorVal())? Collections.emptyList():(new CliParameters.ColorsConverter()).convert(this.wcKit.getRawColorVal());
+    }
     private WordCloud buildPolarWordCloud() {
         if(this.wcKit.getInputSources().size() != 2) {
             throw new IllegalArgumentException("Polar word clouds require exactly 2 input sources. Found: " + this.wcKit.getInputSources().size());
@@ -118,8 +123,8 @@ public class WCBuilder {
         }
 
         wordCloud.setBackgroundColor(this.wcKit.getBackgroundColor());
-        if(!this.wcKit.getColors().isEmpty()) {
-            wordCloud.setColorPalette(new ColorPalette(this.wcKit.getColors()));
+        if(!this.getColors().isEmpty()) {
+            wordCloud.setColorPalette(new ColorPalette(this.getColors()));
         }
 
         wordCloud.setFontScalar(this.buildFontScalar(this.wcKit.getFontScalarType()));
@@ -135,7 +140,7 @@ public class WCBuilder {
             FrequencyAnalyzer e = new FrequencyAnalyzer();
             e.setWordFrequenciesToReturn(this.wcKit.getWordCount());
             e.setMinWordLength(this.wcKit.getMinWordLength());
-            e.setStopWords(this.wcKit.getStopWords());
+// todo     e.setStopWords(this.wcKit.getStopWords());
             e.setCharacterEncoding(this.wcKit.getCharacterEncoding());
             if(this.wcKit.getNormalizers().isEmpty()) {
                 this.wcKit.getNormalizers().addAll(Arrays.asList(new CliParameters.NormalizerType[]{CliParameters.NormalizerType.TRIM, CliParameters.NormalizerType.CHARACTER_STRIPPING, CliParameters.NormalizerType.LOWERCASE}));
@@ -156,7 +161,7 @@ public class WCBuilder {
     }
 
     private WordTokenizer buildTokenizer() {
-        switch(this.wcKit.getTokenizer().ordinal()) {
+        switch(this.wcKit.getTokenizer().ordinal() + 1) {
         case 1:
             return new WhiteSpaceWordTokenizer();
         case 2:
@@ -169,7 +174,7 @@ public class WCBuilder {
     }
 
     private Normalizer buildNormalizer(CliParameters.NormalizerType normalizer) {
-        switch(normalizer.ordinal()) {
+        switch(normalizer.ordinal() + 1) {
         case 1:
             return new LowerCaseNormalizer();
         case 2:
@@ -193,7 +198,7 @@ public class WCBuilder {
 
     private static WordStartStrategy buildWordStart(CliParameters.WordStartType wordStartType) {
 //        switch(null.$SwitchMap$com$kennycason$kumo$cli$CliParameters$WordStartType[wordStartType.ordinal()]) {
-        switch(wordStartType.ordinal()) {
+        switch(wordStartType.ordinal() + 1) {
         case 1:
             return new CenterWordStart();
         case 2:
@@ -204,7 +209,7 @@ public class WCBuilder {
     }
 
     private FontScalar buildFontScalar(CliParameters.FontScalarType fontScalarType) {
-        switch(fontScalarType.ordinal()) {
+        switch(fontScalarType.ordinal() + 1) {
         case 1:
             return new LinearFontScalar(this.wcKit.getFontSizeMin(), this.wcKit.getFontSizeMax());
         case 2:

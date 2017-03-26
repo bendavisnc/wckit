@@ -13,8 +13,20 @@ import java.util.List;
  * Interface for core wckit usage.
  *   HIGHLY based on com.kennycason.kumo.cli.CliParameters.
  *     Essentially tries to be a super set that can exist as edn data.
+ *     Every parameter should  be directly edn compatible.
+ *
  */
 public interface IWCKit {
+
+    /**
+     * Given a resource path to an edn config file - create an IWCKit.
+     */
+    IWCKit fromEdn(String filepath);
+
+    /**
+     * Create a word cloud .png at the specified filepath.
+     */
+    IWCKit spitPng(String filepath);
 
     /**
      *
@@ -24,7 +36,7 @@ public interface IWCKit {
     /**
      * The type of word cloud to generate.
      */
-    IWCKit type(String type);
+    IWCKit wcType(String t);
 
     /**
      * One ore more input sources.
@@ -33,7 +45,7 @@ public interface IWCKit {
      * For standard word clouds only the first input source will be analyzed.
      * Multiple input sources are only relevant for polar or layered word clouds.
      */
-    IWCKit input(String input);
+    IWCKit input(List<String> ss);
 
     /**
      * Output file for the generated word cloud.
@@ -46,14 +58,20 @@ public interface IWCKit {
     IWCKit minWordLength(Long n);
 
     /**
-     * A comma separated list of words to exclude from the word cloud.
+     * Number of words from data set to draw to word cloud.
+     * After the words are sorted by frequency, the words are attempted to be placed in descending order.
      */
-    IWCKit stopWords(List<String> stopWords);
+    IWCKit wordCount(Long n);
 
-    /**
-     * A file of stop words. Format should be one word per line.
-     */
-    IWCKit stopWordsFile(File stopWordsFile);
+//    /**
+//     * A comma separated list of words to exclude from the word cloud.
+//     */
+//    IWCKit stopWords(List<String> stopWords);
+//
+//    /**
+//     * A file of stop words. Format should be one word per line.
+//     */
+//    IWCKit stopWordsFile(File stopWordsFile);
 
     /**
      * Width of the word cloud. Default is 640px.
@@ -103,7 +121,7 @@ public interface IWCKit {
     /**
      * Determine how to blend the two poles of the word cloud.
      */
-    IWCKit polorBlendMode(String pbm);
+    IWCKit polarBlendMode(String pbm);
 
     /**
      * Method to scale font. Default is Linear.
@@ -163,7 +181,8 @@ public interface IWCKit {
 
     public Color getBackgroundColor();
 
-    public List<Color> getColors();
+//    public List<Color> getColors();
+    public String getRawColorVal();
 
     public List<List<Color>> getLayeredColors();
 
@@ -193,9 +212,9 @@ public interface IWCKit {
 
     public int getPadding();
 
-    public List<String> getStopWords();
+//    public List<String> getStopWords();
 
-    public String getStopWordsFile();
+//    public String getStopWordsFile();
 
     public CliParameters.TokenizerType getTokenizer();
 
