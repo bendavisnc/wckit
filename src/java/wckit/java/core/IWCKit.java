@@ -27,6 +27,7 @@ public interface IWCKit {
      * Create a word cloud .png at the specified filepath.
      */
     IWCKit spitPng(String filepath);
+    IWCKit spitPng();
 
     /**
      *
@@ -181,8 +182,8 @@ public interface IWCKit {
 
     public Color getBackgroundColor();
 
-//    public List<Color> getColors();
-    public String getRawColorVal();
+    public List<Color> getColors();
+    public Object getRawColorVal();
 
     public List<List<Color>> getLayeredColors();
 

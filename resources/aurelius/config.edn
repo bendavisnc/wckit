@@ -1,22 +1,31 @@
 {
-  :input-data
-    {
-      :input-source "aurelius/meditations.txt"
-      :resource? true
-    },
-  ;:limit 500,
-  :limit 100,
-  :size [1600 1200],
-  :font-data
-    {
-      :min-size 40,
-      :max-size 100,
-      ;:color "white",
-      ;:color "green",
-      :color "pink",
-      :style "impact"
-    },
-  :collision-mode
-  "PIXEL_PERFECT"
-  :background-color "black"
+  :wc-type "standard",
+  :input ["./resources/aurelius/meditations.txt"],
+  :min-word-length 0,
+  ;:word-count 300,
+  :word-count 50,
+  ;:width 640,
+  :width 1600,
+  :height 800,
+  ;:collision "pixel-perfect",
+  :collision "rectangle",
+  :padding 2,
+  :backgrounds [],
+  :background-color "white",
+  ;:color "0x00ff00, 0x00ffff",
+  :color ["blue"]
+  ;:color "0x000000",
+  :polar-blend-mode "even",
+  :font-scalar "linear",
+  ;:font-size-min 10,
+  ;:font-size-max 50,
+  :font-size-min 20,
+  ;:font-size-max 150,
+  :font-size-max 150,
+  :font-weight "bold",
+  :font-type "impact",
+  :encoding "UTF-8",
+  :word-start "center",
+  :normalizer [],
+  :tokenizer "whitespace"
 }

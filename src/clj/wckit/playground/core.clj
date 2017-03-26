@@ -12,9 +12,11 @@
   (time
     (->
       (wckit.core/create-new)
-      (spit-png "./fuckidk.png")
+      (from-edn "./resources/starwars/config.edn")
+      (spit-png))))
+      ;(spit-png "./fuckidk.png")
       ;(from-edn "epictetus/config.edn")
       ;(spit-png "epictetusout.png")
-      )))
+      ;)))
 
 

@@ -41,7 +41,7 @@ import java.util.List;
  */
 public class WCBuilder {
 
-    private IWCKit wcKit;
+    private final IWCKit wcKit;
 
     public WCBuilder(IWCKit wcK) {
         this.wcKit = wcK;
@@ -85,8 +85,8 @@ public class WCBuilder {
 //        }
 //    }
 
-    public List<Color> getColors() {
-        return StringUtils.isBlank(this.wcKit.getRawColorVal())? Collections.emptyList():(new CliParameters.ColorsConverter()).convert(this.wcKit.getRawColorVal());
+    public static List<Color> getColors(String rawColorVal) {
+        return StringUtils.isBlank(rawColorVal)? Collections.emptyList():(new CliParameters.ColorsConverter()).convert(rawColorVal);
     }
     private WordCloud buildPolarWordCloud() {
         if(this.wcKit.getInputSources().size() != 2) {
@@ -123,8 +123,8 @@ public class WCBuilder {
         }
 
         wordCloud.setBackgroundColor(this.wcKit.getBackgroundColor());
-        if(!this.getColors().isEmpty()) {
-            wordCloud.setColorPalette(new ColorPalette(this.getColors()));
+        if(!this.wcKit.getColors().isEmpty()) {
+            wordCloud.setColorPalette(new ColorPalette(this.wcKit.getColors()));
         }
 
         wordCloud.setFontScalar(this.buildFontScalar(this.wcKit.getFontScalarType()));

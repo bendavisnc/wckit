@@ -42,12 +42,17 @@
         (merge
           this
           (edn/read-string
-            (slurp (io/resource filepath))))))
+            ;(slurp (io/resource filepath)))
+            (slurp filepath))
+          {:config-origin filepath})))
+
     (spitPng [this, filepath]
       (.writeToFile
         (.buildWordCloud
           (new WCBuilder this))
         filepath))
+    (spitPng [this]
+      (.spitPng this (.getOutputSource this)))
     ; setters
     (wcType [this t] ; standard, polar, or layered
       (assoc this :wc-type t))
@@ -99,8 +104,8 @@
     (getBackgroundColor [this]
       (iwc-util/get-background-color this))
       ;(:background-color this))
-    ;(getColors [this]
-    ;  (iwc-util/get-colors this))
+    (getColors [this]
+      (iwc-util/get-colors this))
     (getRawColorVal [this]
       (:color this))
     (getLayeredColors [this]
@@ -182,14 +187,23 @@
 (defn from-edn [wck filepath]
   (.fromEdn wck filepath))
 
-(defn spit-png [wck filepath]
-  (.spitPng wck filepath))
+(defn spit-png
+  ([wck filepath]
+    (.spitPng wck filepath))
+  ([wck]
+   (.spitPng wck)))
 
 (defn createNew []
   (create-new))
 
 
 (init-kumo-logging!)
+
+(defn -main [config-path]
+  (->
+    (create-new)
+    (from-edn config-path)
+    (spit-png)))
 
 
 

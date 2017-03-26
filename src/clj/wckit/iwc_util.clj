@@ -1,6 +1,8 @@
 (ns wckit.iwc-util
   (:require
-    [common.colors :as colors])
+    [common.colors :as colors]
+    [clojure.java.io :as io]
+    [clojure.edn :as edn])
   (:import
     [com.kennycason.kumo CollisionMode]
     [com.kennycason.kumo PolarBlendMode]
@@ -10,12 +12,38 @@
     [com.kennycason.kumo.cli CliParameters$WordStartType]
     [com.kennycason.kumo.cli CliParameters$Type]
     [com.kennycason.kumo.cli CliParameters$NormalizerType]
+    [wckit.java.builder WCBuilder]
     )
 )
 
 (defn get-background-color [wck]
   (colors/create-color
     (:background-color wck)))
+
+;;
+;; A fallback for when the wrapped parser fails for whatever reason.
+(defn get-colors-edn [d]
+  (map
+    #(colors/create-color %)
+    d))
+
+(defn get-colors [wck]
+  (let [
+      color-input (:color wck)
+      color-input (or (and (not (sequential? color-input)) [color-input]) color-input)
+      use-first-parser? (not (sequential? color-input))
+      first-parser-results
+        (and
+          use-first-parser?
+          (try
+            (WCBuilder/getColors color-input)
+            (catch Exception e
+              nil)))
+    ]
+    (if-let [successful-results first-parser-results]
+      successful-results
+      (get-colors-edn color-input))))
+      ;(throw (new Exception "Problem parsing font colors.")))))
 
 (defn get-collision-mode [wck]
   (let [
@@ -60,7 +88,15 @@
   ;(into-array com.kennycason.kumo.cli.CliParameters.NormalizerType
   (new java.util.ArrayList []))
 
-(defn get-output-source [] "dinasaurs.png")
+(defn get-output-source [wck]
+  (str
+    (->
+      (:config-origin wck)
+      (io/file)
+      (.getParentFile)
+      (.getCanonicalPath)
+      )
+    "/render.png"))
 
 (defn get-tokenizer [wck]
   (let [

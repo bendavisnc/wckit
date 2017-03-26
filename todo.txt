@@ -1,12 +1,9 @@
 
-- add font style 
 
-- add font color
+- investigate layered
 
-- add collision option
+- investigate polar
 
-- add from-edn
+- investiage urls
 
-filters
-
-layout stuff
+- work on parent attr
