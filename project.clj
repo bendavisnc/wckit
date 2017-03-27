@@ -15,9 +15,14 @@
   :profiles {:uberjar {:aot :all}}
   :source-paths      ["src/clj"]
   :java-source-paths ["src/java"]
+  :test-paths ["test"]
   :aot :all
   :auto {:default {
     :file-pattern #"\.(clj|cljs|cljx|cljc|edn)$"
     :paths ["src" "resources"]
     }}
+  ;:javac-source-path ["src/java", "test/"]
+  ;:javac-options {:debug "true"}
+  :prep-tasks ["javac" "compile"]
+
   )
