@@ -218,6 +218,7 @@
         (create-new)
         (from-edn config-path)
         (spit-png))
+    ;))
     :else
       (->
         ;SimpleExamples/bananaExample

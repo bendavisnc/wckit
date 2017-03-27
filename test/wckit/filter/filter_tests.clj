@@ -1,9 +1,11 @@
 ;(ns wckit.core-tests
+;  (:require
+;    [wckit.core]
+;    [clojure.test :refer :all])
 ;  (:import
 ;    (wckit.java.filter TopEnglishWordsFilter))
-;  (:require
-;    [clojure.test :refer :all]
-;    ))
+;  (:gen-class)
+;    )
 ;
 ;(def test-filter
 ;  (new TopEnglishWordsFilter))

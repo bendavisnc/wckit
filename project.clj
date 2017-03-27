@@ -17,7 +17,7 @@
   :java-source-paths ["src/java"]
   :aot :all
   :auto {:default {
-    :file-pattern #"\.(clj|cljs|cljx|cljc|edn|java)$"
-    :paths ["resources"]
+    :file-pattern #"\.(clj|cljs|cljx|cljc|edn)$"
+    :paths ["src" "resources"]
     }}
   )

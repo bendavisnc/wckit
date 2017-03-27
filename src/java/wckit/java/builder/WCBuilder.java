@@ -27,7 +27,7 @@ import com.kennycason.kumo.wordstart.WordStartStrategy;
 import org.apache.commons.lang3.StringUtils;
 import wckit.java.core.IWCKit;
 import wckit.java.filter.FilterType;
-//import wckit.java.filter.TopEnglishWordsFilter;
+import wckit.java.filter.TopEnglishWordsFilter;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -167,9 +167,9 @@ public class WCBuilder {
                 frequencyAnalyzer.addNormalizer(buildNormalizer(normalizer));
             }
 
-//            for (final FilterType filter : this.wcKit.getFilters()) {
-//                frequencyAnalyzer.addFilter(buildFilter(filter));
-//            }
+            for (final FilterType filter : this.wcKit.getFilters()) {
+                frequencyAnalyzer.addFilter(buildFilter(filter));
+            }
 
             frequencyAnalyzer.setWordTokenizer(buildTokenizer());
 
@@ -212,14 +212,14 @@ public class WCBuilder {
         }
     }
 
-//    private Filter buildFilter(FilterType filter) {
-//        switch(filter) {
-//            case TOP_ENGLISH:
-//                return new TopEnglishWordsFilter();
-//            default:
-//                throw new IllegalStateException("Unknown filter: " + filter);
-//        }
-//    }
+    private Filter buildFilter(FilterType filter) {
+        switch(filter) {
+            case TOP_ENGLISH:
+                return new TopEnglishWordsFilter();
+            default:
+                throw new IllegalStateException("Unknown filter: " + filter);
+        }
+    }
 
     private KumoFont buildKumoFont(FontWeight fontWeight) {
         return new KumoFont(this.wcKit.getFontType(), fontWeight);

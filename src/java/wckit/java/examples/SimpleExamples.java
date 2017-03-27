@@ -17,6 +17,7 @@ public class SimpleExamples {
             core.createNew()
                 .input(Arrays.asList("./resources/freedata/pinkfloyd.txt"))
                 .backgroundColor("black")
+                .wordCount(10L)
                 .color("blue")
                 .fontSizeMin(20L)
                 .fontSizeMax(220L)

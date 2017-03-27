@@ -162,6 +162,7 @@
         (
           {
             "top-english" FilterType/TOP_ENGLISH
+            ;"top-english" nil
           }
           s)
         (throw (new Exception "Invalid filter type."))))
