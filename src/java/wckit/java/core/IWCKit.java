@@ -4,6 +4,7 @@ import com.kennycason.kumo.CollisionMode;
 import com.kennycason.kumo.PolarBlendMode;
 import com.kennycason.kumo.cli.CliParameters;
 import com.kennycason.kumo.font.FontWeight;
+import wckit.java.filter.FilterType;
 
 import java.awt.*;
 import java.io.File;
@@ -117,7 +118,8 @@ public interface IWCKit {
      * Values must be provided in one of the below formats.
      * Refer to CLI.md for usage examples.
      */
-    IWCKit color(String c);
+//    IWCKit color(String c);
+    IWCKit color(Object c);
 
     /**
      * Determine how to blend the two poles of the word cloud.
@@ -169,6 +171,11 @@ public interface IWCKit {
      * Determine where to start drawing text to the word cloud.
      */
     IWCKit tokenizer(String t);
+
+    /**
+     * A list of additional filters to use
+     */
+    IWCKit filters(List<String> fs);
 
 
     /**
@@ -226,6 +233,8 @@ public interface IWCKit {
     public int getWordCount();
 
     public CliParameters.WordStartType getWordStartType();
+
+    public List<FilterType> getFilters();
 
 }
 

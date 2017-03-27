@@ -2,6 +2,7 @@
   (:import
     [wckit.java.core IWCKit]
     [wckit.java.builder WCBuilder]
+    [wckit.java.examples SimpleExamples]
     )
 
   (:require
@@ -10,12 +11,15 @@
     [common.helpers :refer [init-kumo-logging!]]
     [clojure.edn :as edn]
     )
-  (:gen-class)
+  (:gen-class
+    :methods [^:static [createNew [] wckit.java.core.IWCKit]]
+  )
   )
 
 (defrecord WCKitProto [
     wc-type
     input
+    output
     min-word-length
     word-count
     width
@@ -35,6 +39,7 @@
     word-start
     normalizer
     tokenizer
+    filters
   ]
   IWCKit
     (fromEdn [this, filepath]
@@ -58,6 +63,8 @@
       (assoc this :wc-type t))
     (input [this ss]
       (assoc this :input ss))
+    (output [this s]
+      (assoc this :output s))
     (minWordLength [this n]
       (assoc this :min-word-length n))
     (wordCount [this w]
@@ -96,6 +103,8 @@
       (assoc this :normalizer norms))
     (tokenizer [this t]
       (assoc this :tokenizer t))
+    (filters [this fs]
+      (assoc this :filters fs))
     ; getters
     (getBackgrounds [this]
       (:backgrounds this))
@@ -146,6 +155,8 @@
       (:word-count this))
     (getWordStartType [this]
       (iwc-util/get-word-start-type this))
+    (getFilters [this]
+      (iwc-util/get-filters this))
       )
 
 
@@ -174,6 +185,7 @@
     :word-start "center"
     :normalizer []
     :tokenizer "whitespace"
+    :filters []
   })
 
 
@@ -193,17 +205,24 @@
   ([wck]
    (.spitPng wck)))
 
-(defn createNew []
+(defn ^{:static true} -createNew []
   (create-new))
 
 
 (init-kumo-logging!)
 
-(defn -main [config-path]
-  (->
-    (create-new)
-    (from-edn config-path)
-    (spit-png)))
+(defn -main [& [config-path]]
+  (cond
+    config-path
+      (->
+        (create-new)
+        (from-edn config-path)
+        (spit-png))
+    :else
+      (->
+        ;SimpleExamples/bananaExample
+        SimpleExamples/pinkFloydExample
+        (spit-png "runningExample.png"))))
 
 
 

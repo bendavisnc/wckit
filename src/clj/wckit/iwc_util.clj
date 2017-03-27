@@ -13,6 +13,7 @@
     [com.kennycason.kumo.cli CliParameters$Type]
     [com.kennycason.kumo.cli CliParameters$NormalizerType]
     [wckit.java.builder WCBuilder]
+    [wckit.java.filter FilterType]
     )
 )
 
@@ -20,8 +21,15 @@
   (colors/create-color
     (:background-color wck)))
 
+(defn get-layered-colors-edn [d]
+  (mapv
+    (fn [v]
+      (mapv
+        #(colors/create-color %)
+        v))
+    d))
 ;;
-;; A fallback for when the wrapped parser fails for whatever reason.
+;; A fallback for when the wrapped cli parser fails for whatever reason.
 (defn get-colors-edn [d]
   (map
     #(colors/create-color %)
@@ -29,20 +37,41 @@
 
 (defn get-colors [wck]
   (let [
-      color-input (:color wck)
-      color-input (or (and (not (sequential? color-input)) [color-input]) color-input)
-      use-first-parser? (not (sequential? color-input))
-      first-parser-results
+      ; whatever data's provided
+      raw-color-input (:color wck)
+      ; see if the input is a string that maybe would be parsed using cli.
+      use-cli-parser? (string? raw-color-input)
+      ; just make sure it's a collection
+      seq-color-input (or (and (not (sequential? raw-color-input)) [raw-color-input]) raw-color-input)
+      cli-parser-results
         (and
-          use-first-parser?
+          use-cli-parser?
           (try
-            (WCBuilder/getColors color-input)
+            (WCBuilder/getColors raw-color-input)
             (catch Exception e
               nil)))
     ]
-    (if-let [successful-results first-parser-results]
+    (if-let [successful-results cli-parser-results]
       successful-results
-      (get-colors-edn color-input))))
+      (get-colors-edn seq-color-input))))
+      ;(throw (new Exception "Problem parsing font colors.")))))
+
+(defn get-layered-colors [wck]
+  (let [
+      raw-color-input (:color wck)
+      use-cli-parser? (string? raw-color-input)
+      seq-color-input (or (and (not (sequential? raw-color-input)) [raw-color-input]) raw-color-input)
+      cli-parser-results
+        (and
+          use-cli-parser?
+          (try
+            (WCBuilder/getLayeredColors raw-color-input)
+            (catch Exception e
+              nil)))
+    ]
+    (if-let [successful-results cli-parser-results]
+      successful-results
+      (get-layered-colors-edn seq-color-input))))
       ;(throw (new Exception "Problem parsing font colors.")))))
 
 (defn get-collision-mode [wck]
@@ -53,9 +82,6 @@
     (or
       good-v
       (throw (new Exception "Invalid collision mode.")))))
-
-(defn get-layered-colors [wck]
-  (new Exception "get-layered-colors todo"))
 
 (defn get-polar-blend-mode [wck]
   (let [
@@ -89,14 +115,16 @@
   (new java.util.ArrayList []))
 
 (defn get-output-source [wck]
-  (str
-    (->
-      (:config-origin wck)
-      (io/file)
-      (.getParentFile)
-      (.getCanonicalPath)
-      )
-    "/render.png"))
+  (or
+    (:output wck)
+    (str
+      (->
+        (:config-origin wck)
+        (io/file)
+        (.getParentFile)
+        (.getCanonicalPath)
+        )
+      "/render.png")))
 
 (defn get-tokenizer [wck]
   (let [
@@ -126,5 +154,17 @@
       good-v
       (throw (new Exception "Invalid word start type.")))))
 
+
+(defn get-filters [wck]
+  (map
+    (fn [s]
+      (or
+        (
+          {
+            "top-english" FilterType/TOP_ENGLISH
+          }
+          s)
+        (throw (new Exception "Invalid filter type."))))
+    (:filters wck)))
 
 

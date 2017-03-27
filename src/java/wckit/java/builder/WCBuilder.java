@@ -14,6 +14,7 @@ import com.kennycason.kumo.font.scale.LinearFontScalar;
 import com.kennycason.kumo.font.scale.LogFontScalar;
 import com.kennycason.kumo.font.scale.SqrtFontScalar;
 import com.kennycason.kumo.nlp.FrequencyAnalyzer;
+import com.kennycason.kumo.nlp.filter.Filter;
 import com.kennycason.kumo.nlp.normalize.*;
 import com.kennycason.kumo.nlp.tokenizer.ChineseWordTokenizer;
 import com.kennycason.kumo.nlp.tokenizer.EnglishWordTokenizer;
@@ -25,15 +26,17 @@ import com.kennycason.kumo.wordstart.RandomWordStart;
 import com.kennycason.kumo.wordstart.WordStartStrategy;
 import org.apache.commons.lang3.StringUtils;
 import wckit.java.core.IWCKit;
+import wckit.java.filter.FilterType;
+//import wckit.java.filter.TopEnglishWordsFilter;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.*;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import static com.kennycason.kumo.cli.CliParameters.NormalizerType.LOWERCASE;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * HIGHLY based (copy n paste) on com.kennycason.kumo.cli.KumoCli.
@@ -48,12 +51,13 @@ public class WCBuilder {
     }
 
     public WordCloud buildWordCloud() {
-        switch(this.wcKit.getType().ordinal() + 1) {
-            case 1:
+//        switch(this.wcKit.getType().ordinal() + 1) {
+        switch(this.wcKit.getType()) {
+            case STANDARD:
                 return this.buildStandardWordCloud();
-            case 2:
+            case POLAR:
                 return this.buildPolarWordCloud();
-            case 3:
+            case LAYERED:
 //                this.return buildLayeredWordCloud();
 //                break;
                 throw new UnsupportedOperationException("Unsupported type: (still todo)" + this.wcKit.getType());
@@ -88,6 +92,18 @@ public class WCBuilder {
     public static List<Color> getColors(String rawColorVal) {
         return StringUtils.isBlank(rawColorVal)? Collections.emptyList():(new CliParameters.ColorsConverter()).convert(rawColorVal);
     }
+
+    public static List<List<Color>> getLayeredColors(String rawColorVal) {
+        if (isBlank(rawColorVal)) {
+            return Collections.emptyList();
+        }
+        final List<List<Color>> layeredColors = new ArrayList<>();
+        for (final String layeredColorSet : rawColorVal.split("\\|")) {
+            layeredColors.add(new CliParameters.ColorsConverter().convert(layeredColorSet));
+        }
+        return layeredColors;
+    }
+
     private WordCloud buildPolarWordCloud() {
         if(this.wcKit.getInputSources().size() != 2) {
             throw new IllegalArgumentException("Polar word clouds require exactly 2 input sources. Found: " + this.wcKit.getInputSources().size());
@@ -135,38 +151,42 @@ public class WCBuilder {
         return wordCloud;
     }
 
-    private java.util.List<WordFrequency> loadFrequencies(String input) {
+
+    private List<WordFrequency> loadFrequencies(final String input) {
         try {
-            FrequencyAnalyzer e = new FrequencyAnalyzer();
-            e.setWordFrequenciesToReturn(this.wcKit.getWordCount());
-            e.setMinWordLength(this.wcKit.getMinWordLength());
-// todo     e.setStopWords(this.wcKit.getStopWords());
-            e.setCharacterEncoding(this.wcKit.getCharacterEncoding());
-            if(this.wcKit.getNormalizers().isEmpty()) {
-                this.wcKit.getNormalizers().addAll(Arrays.asList(new CliParameters.NormalizerType[]{CliParameters.NormalizerType.TRIM, CliParameters.NormalizerType.CHARACTER_STRIPPING, CliParameters.NormalizerType.LOWERCASE}));
+            final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
+            frequencyAnalyzer.setWordFrequenciesToReturn(this.wcKit.getWordCount());
+            frequencyAnalyzer.setMinWordLength(this.wcKit.getMinWordLength());
+//            frequencyAnalyzer.setStopWords(this.wcKit.getStopWords());
+            frequencyAnalyzer.setCharacterEncoding(this.wcKit.getCharacterEncoding());
+
+            if (this.wcKit.getNormalizers().isEmpty()) {
+                this.wcKit.getNormalizers().addAll(Arrays.asList(CliParameters.NormalizerType.TRIM, CliParameters.NormalizerType.CHARACTER_STRIPPING, LOWERCASE));
+            }
+            for (final CliParameters.NormalizerType normalizer : this.wcKit.getNormalizers()) {
+                frequencyAnalyzer.addNormalizer(buildNormalizer(normalizer));
             }
 
-            Iterator var3 = this.wcKit.getNormalizers().iterator();
+//            for (final FilterType filter : this.wcKit.getFilters()) {
+//                frequencyAnalyzer.addFilter(buildFilter(filter));
+//            }
 
-            while(var3.hasNext()) {
-                CliParameters.NormalizerType normalizer = (CliParameters.NormalizerType)var3.next();
-                e.addNormalizer(this.buildNormalizer(normalizer));
-            }
+            frequencyAnalyzer.setWordTokenizer(buildTokenizer());
 
-            e.setWordTokenizer(this.buildTokenizer());
-            return e.load(toInputStream(input));
-        } catch (IOException var5) {
-            throw new RuntimeException(var5.getMessage(), var5);
+            return frequencyAnalyzer.load(toInputStream(input));
+
+        } catch (final IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
     private WordTokenizer buildTokenizer() {
-        switch(this.wcKit.getTokenizer().ordinal() + 1) {
-        case 1:
+        switch(this.wcKit.getTokenizer()) {
+        case WHITE_SPACE:
             return new WhiteSpaceWordTokenizer();
-        case 2:
+        case ENGLISH:
             return new EnglishWordTokenizer();
-        case 3:
+        case CHINESE:
             return new ChineseWordTokenizer();
         default:
             throw new IllegalStateException("Unknown tokenizer: " + this.wcKit.getTokenizer());
@@ -174,23 +194,32 @@ public class WCBuilder {
     }
 
     private Normalizer buildNormalizer(CliParameters.NormalizerType normalizer) {
-        switch(normalizer.ordinal() + 1) {
-        case 1:
+        switch(normalizer) {
+        case LOWERCASE:
             return new LowerCaseNormalizer();
-        case 2:
+        case UPPERCASE:
             return new UpperCaseNormalizer();
-        case 3:
+        case BUBBLE:
             return new BubbleTextNormalizer();
-        case 4:
+        case CHARACTER_STRIPPING:
             return new CharacterStrippingNormalizer();
-        case 5:
+        case UPSIDE_DOWN:
             return new UpsideDownNormalizer();
-        case 6:
+        case TRIM:
             return new TrimToEmptyNormalizer();
         default:
             throw new IllegalStateException("Unknown normalizer: " + normalizer);
         }
     }
+
+//    private Filter buildFilter(FilterType filter) {
+//        switch(filter) {
+//            case TOP_ENGLISH:
+//                return new TopEnglishWordsFilter();
+//            default:
+//                throw new IllegalStateException("Unknown filter: " + filter);
+//        }
+//    }
 
     private KumoFont buildKumoFont(FontWeight fontWeight) {
         return new KumoFont(this.wcKit.getFontType(), fontWeight);

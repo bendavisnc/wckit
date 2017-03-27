@@ -1,23 +1,16 @@
 {
-  :wc-type "standard",
-  :input ["./resources/bibleAndKoran/bible.txt"],
+  :wc-type "polar",
+  :input ["./resources/bibleAndKoran/bible.txt", "./resources/bibleAndKoran/koran.txt"],
   :min-word-length 0,
-  ;:word-count 300,
-  ;:word-count 50,
-  :word-count 250,
-  ;:width 640,
+  :word-count 100,
   :width 1600,
   :height 800,
   :collision "pixel-perfect",
-  ;:collision "rectangle",
   :padding 2,
-  :backgrounds [],
   :background-color "white",
-  :color "black"
+  :color [["orange", "red"], ["purple", "green"]]
   :polar-blend-mode "even",
   :font-scalar "linear",
-  ;:font-size-min 10,
-  ;:font-size-max 50,
   :font-size-min 20,
   :font-size-max 150,
   :font-weight "bold",
@@ -26,4 +19,5 @@
   :word-start "center",
   :normalizer [],
   :tokenizer "whitespace"
+  :filters ["top-english"]
 }
